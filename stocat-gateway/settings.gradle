@@ -1,0 +1,2 @@
+rootProject.name = 'stocat-gateway'
+include(":gateway", ":services:demo-catalog", ":services:demo-order")

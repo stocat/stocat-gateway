@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        register: true
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        heartbeat:
+          enabled: true
+    gateway:
+      # Auto-create routes from Consul service IDs
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
