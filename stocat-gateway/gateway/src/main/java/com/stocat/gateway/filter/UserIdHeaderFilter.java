@@ -23,7 +23,6 @@ public class UserIdHeaderFilter implements GlobalFilter, Ordered {
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
     private ServerHttpRequest withUserId(ServerHttpRequest request, String userId) {
-        log.info("withUserId");
         return request.mutate()
                 .headers(headers -> {
                     headers.remove(AUTHORIZATION_HEADER);
