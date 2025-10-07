@@ -1,0 +1,25 @@
+nameOverride: demo-catalog
+
+image:
+  repository: demo-catalog
+  tag: 0.0.1-SNAPSHOT
+
+containerPort: 8081
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8081
+
+profiles:
+  active: local-k8s
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: istio-ingressgateway
+      namespace: istio-system
+  hostnames:
+    - stocat-demo-catalog.local
+  pathPrefixes:
+    - "/"

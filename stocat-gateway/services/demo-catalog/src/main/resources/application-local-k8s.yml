@@ -1,0 +1,7 @@
+# K8s-specific overrides (activate via SPRING_PROFILES_ACTIVE=local-k8s)
+spring:
+  cloud:
+    consul:
+      enabled: false
+      discovery:
+        register: false

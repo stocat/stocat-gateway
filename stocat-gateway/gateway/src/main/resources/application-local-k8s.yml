@@ -1,0 +1,12 @@
+# K8s-specific overrides (activate via SPRING_PROFILES_ACTIVE=local-k8s)
+spring:
+  config:
+    import: "optional:consul:"
+  cloud:
+    consul:
+      host: consul-server.consul.svc.cluster.local
+      port: 8500
+      discovery:
+        register: false
+        heartbeat:
+          enabled: false

@@ -4,12 +4,8 @@ server:
 spring:
   application:
     name: gateway
-  config:
-    import: "optional:consul:"
   cloud:
     consul:
-      host: localhost
-      port: 8500
       config:
         enabled: true
         format: YAML

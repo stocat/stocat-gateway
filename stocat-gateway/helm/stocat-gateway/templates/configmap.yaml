@@ -1,0 +1,13 @@
+{{- if .Values.applicationYaml }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "stocat.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "stocat.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  application.yaml: |
+{{- .Values.applicationYaml | nindent 4 }}
+{{- end }}
+

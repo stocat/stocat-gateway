@@ -1,0 +1,29 @@
+nameOverride: gateway
+
+global:
+  consul:
+    enabled: false
+
+image:
+  repository: gateway
+  tag: 0.0.1-SNAPSHOT
+
+containerPort: 8080
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8080
+
+profiles:
+  active: local-k8s
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: istio-ingressgateway
+      namespace: istio-system
+  hostnames:
+    - stocat-gw.local
+  pathPrefixes:
+    - "/"
