@@ -1,4 +1,11 @@
-# K8s-specific overrides (activate via SPRING_PROFILES_ACTIVE=local-k8s)
+logging:
+  level:
+    root: DEBUG
+    org.springframework: DEBUG
+    reactor.netty: DEBUG
+  pattern:
+    level: "%5p [trace_id=%X{trace_id:-} span_id=%X{span_id:-}] "
+
 spring:
   config:
     import: "optional:consul:"
@@ -10,3 +17,18 @@ spring:
         register: false
         heartbeat:
           enabled: false
+    gateway:
+      server:
+        webflux:
+          httpserver:
+            wiretap: true
+          httpclient:
+            wiretap: true
+
+# Enable Reactor Netty access log (combined format) via system property.
+# If not picked up via properties, we also set it via JAVA_TOOL_OPTIONS in Helm values if needed.
+reactor:
+  netty:
+    http:
+      server:
+        accessLogEnabled: true

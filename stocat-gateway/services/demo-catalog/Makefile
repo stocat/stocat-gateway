@@ -1,15 +1,15 @@
 # Simple Makefile to build the demo-catalog image and load into kind
 
 # Config
-IMAGE_NAME ?= demo-catalog
-IMAGE_TAG ?= 0.0.1-SNAPSHOT
-KIND_CLUSTER ?= stocat
+IMAGE_NAME 		?= demo-catalog
+IMAGE_TAG 		?= 0.0.1-SNAPSHOT
+KIND_CLUSTER 	?= kind-local
 
 GRADLE ?= ../../gradlew
 
 IMAGE := $(IMAGE_NAME):$(IMAGE_TAG)
 
-.PHONY: help all image kind-load print-image
+.PHONY: help all image kind-load print-image build-jar
 
 help:
 	@echo "Targets:"
@@ -21,9 +21,12 @@ help:
 
 all: image kind-load
 
-# Build the image using Boot Build Image
-image: print-image
-	$(GRADLE) :services:demo-catalog:bootBuildImage --imageName=$(IMAGE)
+# Build the application JAR first, then docker build
+build-jar:
+	$(GRADLE) :services:demo-catalog:bootJar
+
+image: print-image build-jar
+	docker build -t $(IMAGE) .
 
 # Load the image into the specified kind cluster
 kind-load: print-image
@@ -31,4 +34,3 @@ kind-load: print-image
 
 print-image:
 	@echo "Using image: $(IMAGE)"
-

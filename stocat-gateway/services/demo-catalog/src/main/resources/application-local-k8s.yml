@@ -5,3 +5,11 @@ spring:
       enabled: false
       discovery:
         register: false
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+  pattern:
+    level: "%5p [trace_id=%X{trace_id:-} span_id=%X{span_id:-}] "

@@ -22,3 +22,12 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
+
+// Configure Spring Boot build image to include the OpenTelemetry Java agent via Paketo buildpacks.
+// This contributes the agent at build-time so the resulting image is ready for OTEL when run.
+tasks.named('bootBuildImage') {
+    environment = [
+            // Contribute the OpenTelemetry agent to the image at build time
+            'BP_OPENTELEMETRY_ENABLED': 'true'
+    ]
+}

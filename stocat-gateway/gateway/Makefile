@@ -9,7 +9,7 @@ GRADLE ?= ../gradlew
 
 IMAGE := $(IMAGE_NAME):$(IMAGE_TAG)
 
-.PHONY: help all image kind-load print-image
+.PHONY: help all image kind-load print-image build-jar
 
 help:
 	@echo "Targets:"
@@ -21,9 +21,12 @@ help:
 
 all: image kind-load
 
-# Build the image for the gateway module using Boot Build Image
-image: print-image
-	$(GRADLE) :gateway:bootBuildImage --imageName=$(IMAGE)
+# Build the application JAR first, then docker build using the Dockerfile
+build-jar:
+	$(GRADLE) :gateway:bootJar
+
+image: print-image build-jar
+	docker build -t $(IMAGE) .
 
 # Load the image into the specified kind cluster
 kind-load: print-image
@@ -31,4 +34,3 @@ kind-load: print-image
 
 print-image:
 	@echo "Using image: $(IMAGE)"
-

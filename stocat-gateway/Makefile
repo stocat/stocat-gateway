@@ -167,12 +167,20 @@ uninstall-gateway:
 	@helm uninstall gateway -n $(RELEASE_NS) || true
 
 uninstall-catalog:
-	@helm uninstall demo-catalog -n $(RELEASE_NS) || true
+	@helm uninstall demo-catalog -n $(RELEASE_DEMO_NS) || true
 
 uninstall-order:
-	@helm uninstall demo-order -n $(RELEASE_NS) || true
+	@helm uninstall demo-order -n $(RELEASE_DEMO_NS) || true
 
 uninstall-all: uninstall-gateway uninstall-catalog uninstall-order
 
 status:
 	@kubectl -n $(RELEASE_NS) get pods,svc
+
+
+# Convenience
+.PHONY: all
+all: deploy-gateway-ts deploy-catalog-ts deploy-order-ts
+
+.PHONY: clean
+clean: uninstall-all

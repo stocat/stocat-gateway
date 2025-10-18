@@ -14,6 +14,29 @@ service:
 profiles:
   active: local-k8s
 
+# OpenTelemetry configuration
+env:
+  - name: OTEL_SERVICE_NAME
+    value: "demo-catalog"
+  - name: OTEL_TRACES_SAMPLER
+    value: "parentbased_always_on"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://clickstack-hdx-oss-v2-otel-collector.observability.svc:4317"
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: "grpc"
+  - name: OTEL_EXPORTER_OTLP_HEADERS
+    value: "authorization=89caf0d8-e4ff-4211-83a2-b2f55c82ed99"
+  - name: OTEL_TRACES_EXPORTER
+    value: "otlp"
+  - name: OTEL_METRICS_EXPORTER
+    value: "otlp"
+  - name: OTEL_LOGS_EXPORTER
+    value: "otlp"
+  - name: OTEL_LOGS_BRIDGE_ENABLED
+    value: "true"
+  - name: OTEL_RESOURCE_ATTRIBUTES
+    value: "service.namespace=stocat-demo"
+
 httpRoute:
   enabled: true
   parentRefs:
