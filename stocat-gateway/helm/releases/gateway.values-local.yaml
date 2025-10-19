@@ -8,6 +8,8 @@ image:
   repository: gateway
   tag: 0.0.1-SNAPSHOT
 
+replicas: 1
+
 containerPort: 8080
 
 # OpenTelemetry configuration for gateway

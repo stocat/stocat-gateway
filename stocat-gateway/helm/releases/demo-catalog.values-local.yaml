@@ -4,6 +4,8 @@ image:
   repository: demo-catalog
   tag: 0.0.1-SNAPSHOT
 
+replicas: 2
+
 containerPort: 8081
 
 service:

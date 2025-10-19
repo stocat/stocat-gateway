@@ -4,6 +4,8 @@ image:
   repository: demo-order
   tag: 0.0.1-SNAPSHOT
 
+replicas: 2
+
 containerPort: 8082
 
 service:
