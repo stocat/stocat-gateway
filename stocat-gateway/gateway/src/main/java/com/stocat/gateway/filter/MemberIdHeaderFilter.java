@@ -17,16 +17,16 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class UserIdHeaderFilter implements GlobalFilter, Ordered {
+public class MemberIdHeaderFilter implements GlobalFilter, Ordered {
 
-    private static final String USER_ID_HEADER = "X-USER-ID";
+    private static final String MEMBER_ID_HEADER = "X-MEMBER-ID";
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
-    private ServerHttpRequest withUserId(ServerHttpRequest request, String userId) {
+    private ServerHttpRequest withMemberId(ServerHttpRequest request, String memberId) {
         return request.mutate()
                 .headers(headers -> {
                     headers.remove(AUTHORIZATION_HEADER);
-                    headers.set(USER_ID_HEADER, userId);
+                    headers.set(MEMBER_ID_HEADER, memberId);
                 })
                 .build();
     }
@@ -38,10 +38,10 @@ public class UserIdHeaderFilter implements GlobalFilter, Ordered {
                 .ofType(JwtAuthenticationToken.class)
                 .map(jwtAuth -> {
                     Jwt jwt = jwtAuth.getToken();
-                    String userId = Objects.toString(jwt.getClaims().getOrDefault("userId", jwt.getSubject()), "");
-                    return withUserId(exchange.getRequest(), userId);
+                    String memberId = Objects.toString(jwt.getClaims().getOrDefault("memberId", jwt.getSubject()), "");
+                    return withMemberId(exchange.getRequest(), memberId);
                 })
-                .defaultIfEmpty(withUserId(exchange.getRequest(), ""))
+                .defaultIfEmpty(withMemberId(exchange.getRequest(), ""))
                 .flatMap(req -> chain.filter(exchange.mutate().request(req).build()));
     }
 

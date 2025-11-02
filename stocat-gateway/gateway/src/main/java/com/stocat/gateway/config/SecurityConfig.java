@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .pathMatchers(
                                 "/actuator/**",
                                 "/auth/login",
-                                "/auth/register",
+                                "/auth/signup",
                                 "/auth/find-id",
                                 "/auth/find-password"
                         ).permitAll()

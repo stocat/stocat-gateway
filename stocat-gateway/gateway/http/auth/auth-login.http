@@ -1,0 +1,12 @@
+### Login request via Gateway
+# @name login
+POST http://127.0.0.1:8080/auth/login
+accept: */*
+Content-Type: application/json
+
+{
+  "email": "test1@example.com",
+  "password": "password"
+}
+
+

@@ -123,6 +123,11 @@ spring:
             locator:
               enabled: false
           routes:
+            - id: auth
+              uri: lb://auth-api
+              predicates:
+                - Path=/auth/**
+
             - id: catalog
               uri: lb://demo-catalog
               predicates:
@@ -151,6 +156,11 @@ spring:
             locator:
               enabled: false
           routes:
+            - id: auth
+              uri: lb://auth-api
+              predicates:
+                - Path=/auth/**
+
             - id: catalog
               uri: lb://demo-catalog
               predicates:

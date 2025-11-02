@@ -1,0 +1,11 @@
+### Signup request via Gateway
+POST http://127.0.0.1:8080/auth/signup
+accept: */*
+Content-Type: application/json
+
+{
+  "nickname": "홍길동1",
+  "email": "test1@example.com",
+  "password": "password"
+}
+
