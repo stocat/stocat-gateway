@@ -1,4 +1,4 @@
-package com.stocat.gateway.filter;
+package com.stocat.gateway.security.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

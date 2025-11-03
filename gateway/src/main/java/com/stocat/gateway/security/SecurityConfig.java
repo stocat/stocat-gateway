@@ -1,6 +1,6 @@
-package com.stocat.gateway.config;
+package com.stocat.gateway.security;
 
-import com.stocat.gateway.security.JwtSecretProvider;
+import com.stocat.gateway.security.jwt.JwtSecretProvider;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +10,7 @@ import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
+import javax.crypto.SecretKey;
 
 @Configuration
 public class SecurityConfig {
@@ -45,12 +44,7 @@ public class SecurityConfig {
     @Bean
     @RefreshScope
     ReactiveJwtDecoder jwtDecoder() {
-        String secret = jwtSecretProvider.loadSecret();
-        if (secret == null || secret.isEmpty()) {
-            throw new IllegalStateException("JWT secret not found from Consul");
-        }
-        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "HmacSHA256");
-        return NimbusReactiveJwtDecoder.withSecretKey(secretKey).build();
+        SecretKey signingKey = jwtSecretProvider.getSigningKey();
+        return NimbusReactiveJwtDecoder.withSecretKey(signingKey).build();
     }
 }

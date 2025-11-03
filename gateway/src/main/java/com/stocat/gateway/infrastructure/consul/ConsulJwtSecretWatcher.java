@@ -1,4 +1,4 @@
-package com.stocat.gateway.security;
+package com.stocat.gateway.infrastructure.consul;
 
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.Response;
@@ -36,7 +36,6 @@ public class ConsulJwtSecretWatcher {
             Long modifyIndex = value != null ? value.getModifyIndex() : null;
 
             if (modifyIndex == null) {
-                // 값이 없어진 경우에도 인덱스가 null일 수 있으므로 변화로 간주하지 않음
                 return;
             }
 
