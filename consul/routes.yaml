@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+          routes:
+            - id: auth
+              uri: lb://auth-api
+              predicates:
+                - Path=/auth/**
+
+            - id: catalog
+              uri: lb://demo-catalog
+              predicates:
+                - Path=/catalog/**
+              filters:
+                - StripPrefix=1
+
+            - id: order
+              uri: lb://demo-order
+              predicates:
+                - Path=/order/**
+              filters:
+                - StripPrefix=1
+
