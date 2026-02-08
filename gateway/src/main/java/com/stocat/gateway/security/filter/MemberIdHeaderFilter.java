@@ -25,7 +25,10 @@ public class MemberIdHeaderFilter implements GlobalFilter, Ordered {
     private ServerHttpRequest withMemberId(ServerHttpRequest request, String memberId) {
         return request.mutate()
                 .headers(headers -> {
-                    headers.remove(AUTHORIZATION_HEADER);
+                    // Auth 서비스로 가는 요청은 Authorization 헤더를 유지해야 함
+                    if (!request.getPath().value().startsWith("/auth")) {
+                        headers.remove(AUTHORIZATION_HEADER);
+                    }
                     headers.set(MEMBER_ID_HEADER, memberId);
                 })
                 .build();

@@ -33,7 +33,8 @@ public class SecurityConfig {
                                 "/auth/login",
                                 "/auth/signup",
                                 "/auth/find-id",
-                                "/auth/find-password"
+                                "/auth/find-password",
+                                "/auth/summary"
                         ).permitAll()
                         .anyExchange().authenticated()
                 )

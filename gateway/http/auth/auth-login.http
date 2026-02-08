@@ -9,4 +9,7 @@ Content-Type: application/json
   "password": "password"
 }
 
-
+> {%
+    client.global.set("accessToken", response.body.data.accessToken);
+    client.global.set("refreshToken", response.body.data.refreshToken);
+%}

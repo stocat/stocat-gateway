@@ -10,3 +10,12 @@ services:
       - "8600:8600/tcp"
       - "8600:8600/udp"
     restart: unless-stopped
+
+  consul-init:
+    image: curlimages/curl:latest
+    depends_on:
+      - consul
+    volumes:
+      - ./consul-config:/consul-config
+      - ./consul-init.sh:/consul-init.sh
+    entrypoint: ["/bin/sh", "/consul-init.sh"]
