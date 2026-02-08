@@ -1,0 +1,40 @@
+# Local-only overrides for auth-api go here (optional).
+# Example: uncomment to run on an alternate port when developing locally.
+# service:
+#   port: 18080
+
+
+# Local-only overrides for auth-api go here (optional).
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: istio-ingressgateway
+      namespace: istio-system
+  hostnames:
+    - localhost
+  pathPrefixes:
+    - "/"
+
+# OpenTelemetry configuration
+env:
+  - name: OTEL_AGENT_ENABLED
+    value: "true"
+  - name: OTEL_SERVICE_NAME
+    value: "gateway"
+  - name: OTEL_TRACES_SAMPLER
+    value: "parentbased_always_on"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://otel-collector-opentelemetry-collector.observability.svc:4317"
+  - name: OTEL_EXPORTER_OTLP_PROTOCOL
+    value: "grpc"
+  - name: OTEL_TRACES_EXPORTER
+    value: "otlp"
+  - name: OTEL_METRICS_EXPORTER
+    value: "otlp"
+  - name: OTEL_LOGS_EXPORTER
+    value: "otlp"
+  - name: OTEL_LOGS_BRIDGE_ENABLED
+    value: "true"
+  - name: OTEL_RESOURCE_ATTRIBUTES
+    value: "service.namespace=stocat"

@@ -1,0 +1,12 @@
+# Local/dev environment overrides applied on top of service defaults.
+image:
+  tag: "local"
+
+global:
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: k8s-local
+
+env:
+  - name: OTEL_AGENT_ENABLED
+    value: "false"

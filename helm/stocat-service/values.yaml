@@ -1,0 +1,45 @@
+imagePullPolicy: IfNotPresent
+
+# Global options applied to resources
+global:
+  labels: {}
+  annotations: {}
+  env: []          # list of {name, value}
+
+# Single app settings (Deployment fixed to 1 replica)
+image:
+  repository: stocat-service
+  tag: "0.0.1"
+
+containerPort: 8080
+env: []            # list of {name, value}
+resources: {}
+
+probes:
+  readiness:
+    path: /actuator/health
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  liveness:
+    path: /actuator/health
+    initialDelaySeconds: 30
+    periodSeconds: 30
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8080   # defaults to containerPort if not set
+
+# HTTPRoute (Gateway API) — optional; requires Gateway/CRDs
+httpRoute:
+  enabled: false
+  parentRefs: []
+  hostnames: []
+  # Minimal rules via pathPrefixes. One backend -> this chart's Service
+  pathPrefixes: []      # e.g., ["/", "/catalog", "/order"]
+  backendPort: null     # defaults to service.port
+  filters: []           # optional HTTPRoute filters
+
+# Spring profiles activation (when set, passed as SPRING_PROFILES_ACTIVE)
+profiles:
+  active: ""

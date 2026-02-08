@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "stocat.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "stocat.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
+    {{- with .Values.global.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.global.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "stocat.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "stocat.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- with .Values.global.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort | default 8080 }}
+          env:
+            {{- range $env := .Values.global.env }}
+            - name: {{ $env.name | quote }}
+              value: {{ $env.value | quote }}
+            {{- end }}
+            {{- with .Values.profiles.active }}
+            {{- if . }}
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ . | quote }}
+            {{- end }}
+            {{- end }}
+            {{- range $env := .Values.env }}
+            - name: {{ $env.name | quote }}
+              value: {{ $env.value | quote }}
+            {{- end }}
+          {{- if .Values.applicationYaml }}
+          volumeMounts:
+            - name: app-config
+              mountPath: /workspace/config
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.readiness.path | default "/actuator/health" | quote }}
+              port: {{ .Values.containerPort | default 8080 }}
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds | default 10 }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds | default 10 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probes.liveness.path | default "/actuator/health" | quote }}
+              port: {{ .Values.containerPort | default 8080 }}
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds | default 30 }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds | default 30 }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.applicationYaml }}
+      volumes:
+        - name: app-config
+          configMap:
+            name: {{ include "stocat.fullname" . }}
+            items:
+              - key: application.yaml
+                path: application.yaml
+      {{- end }}
