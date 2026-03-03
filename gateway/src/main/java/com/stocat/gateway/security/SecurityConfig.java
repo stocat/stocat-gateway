@@ -34,11 +34,12 @@ public class SecurityConfig {
                                 "/auth/signup",
                                 "/auth/find-id",
                                 "/auth/find-password",
-                                "/auth/summary"
-                        ).permitAll()
-                        .anyExchange().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> { }));
+                                "/auth/summary",
+                                "/asset-websocket-api/**")
+                        .permitAll()
+                        .anyExchange().authenticated())
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
+                }));
         return http.build();
     }
 

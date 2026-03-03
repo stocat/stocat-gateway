@@ -25,3 +25,10 @@ spring:
                 - Path=/order/**
               filters:
                 - StripPrefix=1
+
+            - id: asset-websocket-api
+              uri: lb:ws://asset-websocket-api
+              predicates:
+                - Path=/asset-websocket-api/**
+              filters:
+                - StripPrefix=1
