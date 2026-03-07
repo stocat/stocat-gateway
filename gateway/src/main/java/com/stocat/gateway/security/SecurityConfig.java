@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import org.springframework.security.oauth2.server.resource.web.server.authentication.ServerBearerTokenAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 import javax.crypto.SecretKey;
@@ -22,6 +23,9 @@ public class SecurityConfig {
 
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        ServerBearerTokenAuthenticationConverter bearerTokenConverter = new ServerBearerTokenAuthenticationConverter();
+        bearerTokenConverter.setAllowUriQueryParameter(true);
+
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
@@ -34,12 +38,13 @@ public class SecurityConfig {
                                 "/auth/signup",
                                 "/auth/find-id",
                                 "/auth/find-password",
-                                "/auth/summary",
-                                "/asset-websocket-api/**")
+                                "/auth/summary")
                         .permitAll()
                         .anyExchange().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
-                }));
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .bearerTokenConverter(bearerTokenConverter)
+                        .jwt(jwt -> {
+                        }));
         return http.build();
     }
 

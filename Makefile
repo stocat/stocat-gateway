@@ -21,6 +21,7 @@ help:
 	@echo "  gateway          게이트웨이 모듈 실행 (:gateway:bootRun)"
 	@echo "  dev              Consul 기동 + routes 등록 + (시크릿 등록) + 게이트웨이 실행"
 	@echo "  all              compose-up → consul-wait → routes → jwt → gateway 순서로 전체 실행"
+	@echo "  test-ws          npx wscat을 이용해 웹소켓 테스트 (make test-ws TOKEN=...)"
 	@echo ""
 	@echo "변수: CONSUL_ADDR=$(CONSUL_ADDR)  JWT_SECRET=[hidden]  JWT_PASSPHRASE=[hidden]"
 
@@ -71,3 +72,13 @@ gateway:
 dev: compose-up consul-wait consul-routes consul-jwt gateway
 
 all: compose-up consul-wait consul-routes consul-jwt gateway
+
+test-ws:
+	@echo "============================================================"
+	@echo "이제 웹소켓 테스트는 자동화 스크립트를 제공합니다!"
+	@echo "회원가입, 토큰발급, 소켓연결까지 한 번에 진행됩니다."
+	@echo ""
+	@echo "실행 방법:"
+	@echo "$$ cd gateway/http/websocket"
+	@echo "$$ make test-rate"
+	@echo "============================================================"

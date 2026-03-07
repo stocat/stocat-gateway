@@ -12,23 +12,14 @@ spring:
               predicates:
                 - Path=/auth/**
 
-            - id: catalog
-              uri: lb://demo-catalog
+            - id: trade
+              uri: lb://trade-api
               predicates:
-                - Path=/catalog/**
-              filters:
-                - StripPrefix=1
-
-            - id: order
-              uri: lb://demo-order
-              predicates:
-                - Path=/order/**
-              filters:
-                - StripPrefix=1
+                - Path=/trade/**
 
             - id: asset-websocket-api
               uri: lb:ws://asset-websocket-api
               predicates:
-                - Path=/asset-websocket-api/**
+                - Path=/asset-ws/**
               filters:
                 - StripPrefix=1

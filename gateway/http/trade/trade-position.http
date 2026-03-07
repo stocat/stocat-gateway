@@ -1,0 +1,4 @@
+### Get Errors
+GET http://127.0.0.1:8080/trade/positions
+accept: */*
+Authorization: Bearer {{accessToken}}
